@@ -17,7 +17,7 @@ router = InferringRouter()
 class BaseRouter:
     def __init__(self):
         self._worker = type(self).__name__
-        self._s3 = S3Uploader()
+        self._s3: S3Uploader = S3Uploader()
 
     @router.post("/envpack/upload", response_model=res_vo.Base)
     def upload_envpack(self, req_body: req_vo.UploadEnv):
@@ -31,8 +31,12 @@ class BaseRouter:
             result_msg.CODE = REQUEST_RESULT.FAIL
             result_msg.ERROR_MSG = "failed to make venv for python backend"
         else:
-            # upload to s3 repo
-            pass
+            target_path = f"converters/{req_body.CONVERTER_ID}/{msg.split('/')[-1]}"
+            try:
+                self._s3.upload(bucket=req_body.PRJ_ID, source_path=msg, target_path=target_path)
+            except Exception as e:
+                result_msg.CODE = REQUEST_RESULT.FAIL
+                result_msg.ERROR_MSG = "failed to upload venv for python backend"
         # delete file if exist
         return result_msg
 
