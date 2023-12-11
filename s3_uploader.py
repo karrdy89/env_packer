@@ -18,7 +18,7 @@ def singleton(class_):
 
 @singleton
 class S3Uploader:
-    def __init__(self, chunk_size: int):
+    def __init__(self, chunk_size: int = 50):
         self._chunk_size = chunk_size
         self._s3: Client = boto3.client(service_name="s3",
                                         endpoint_url=SYSTEM_ENV.S3_ENDPOINT,
@@ -36,8 +36,3 @@ class S3Uploader:
                 while data:
                     f_in.write(data)
                     data = f_out.read(1024*1024*self._chunk_size)
-
-
-s3u = S3Uploader(chunk_size=10)
-s3u.upload(bucket="bc4ab35d-145b-4646-8636-2cc4ce0cf5e8", target_path="converters/test/test.obj",
-           source_path=r"C:\Users\C23A-023\PycharmProjects\env_packer\start_server.py")

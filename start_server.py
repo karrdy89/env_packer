@@ -5,6 +5,7 @@ import uvicorn
 
 from _constants import ROOT_DIR, SYSTEM_ENV
 from router import router
+from s3_uploader import S3Uploader
 
 
 app = FastAPI()
@@ -35,7 +36,6 @@ class UvicornServer(uvicorn.Server):
 
 
 if __name__ == "__main__":
-    pipeline_manager = PipelineManager()
-    # service_state = ServiceState()# dev
+    s3_uploader = S3Uploader()
     server = UvicornServer(config=config)
     server.run()
