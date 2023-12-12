@@ -3,7 +3,8 @@ from typing import Optional
 
 from _constants import TEMP_DIR
 
-def create_envpack(env_name: str, packages: list[str], python_version: Optional[str] = "3.11") -> tuple[int, str]:
+
+def create_envpack(env_name: str, packages: list[str], python_version: Optional[str] = "3.11") -> tuple[int, str, str]:
     python_base = "python" + python_version
     packages = ' '.join(packages)
     save_path = f"{TEMP_DIR}/{env_name}.tar.gz"
@@ -17,12 +18,12 @@ def create_envpack(env_name: str, packages: list[str], python_version: Optional[
     except subprocess.CalledProcessError as e:
         subprocess.run(f"conda deactivate", shell=True, check=False)
         subprocess.run(f"conda env remove -n {env_name}", shell=True, check=False)
-        return -1, e.__str__()
+        return -1, e.__str__(), save_path
     except Exception as e:
         subprocess.run(f"conda deactivate", shell=True, check=False)
         subprocess.run(f"conda env remove -n {env_name}", shell=True, check=False)
-        return -2, e.__str__()
+        return -2, e.__str__(), save_path
     else:
-        return 0, save_path
+        return 0, '', save_path
 
 
