@@ -11,6 +11,7 @@ RUN apt-get install python3-pip -y
 RUN apt-get install python-is-python3 -y
 RUN conda create -n python3.11 python=3.11 -y
 WORKDIR /app/
+COPY ./ .
 RUN mkdir cert
 RUN mkdir logs
 RUN mkdir config

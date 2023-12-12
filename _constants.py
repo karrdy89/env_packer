@@ -9,6 +9,7 @@ ROOT_DIR = os.path.dirname(
 )
 
 TEMP_DIR = ROOT_DIR + "/tmp"
+PYTHON_VERSIONS = ["python3.11"]
 
 
 class SystemEnvironments(BaseModel):
