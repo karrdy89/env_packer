@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Extra
 
 
 class UploadEnv(BaseModel):
@@ -6,3 +6,14 @@ class UploadEnv(BaseModel):
     CONVERTER_ID: str
     PYTHON_VER: str | None = None
     PACKAGES: list[str]
+
+
+class RegisterService(BaseModel):
+    URL: str
+    LABEL: str
+    TAG: str | None = None
+    REGION: str
+    ID: str
+
+    class Config:
+        extra = Extra.forbid

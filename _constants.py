@@ -55,4 +55,10 @@ class RequestResult:
     FAIL: str = "10"
 
 
+@dataclass
+class RequestPath:
+    REGISTER_SERVICE: str = "/api/v0/service/register"
+    CHECK_SERVICE_CONNECTION: str = "/api/v0/service"
+
+
 REQUEST_RESULT = RequestResult()

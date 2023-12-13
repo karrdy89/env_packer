@@ -48,9 +48,9 @@ class BaseRouter:
             os.remove(path)
         return result_msg
 
-    @router.get("/envpack/pythons", response_model=res_vo.ListPython)
+    @router.get("/envpack/backend/pythons", response_model=res_vo.ListBackends)
     def get_pythons(self):
-        result_msg = res_vo.Base(CODE=REQUEST_RESULT.SUCCESS, ERROR_MSG='', PYTHONS=PYTHON_VERSIONS)
+        result_msg = res_vo.Base(CODE=REQUEST_RESULT.SUCCESS, ERROR_MSG='', BACKENDS=PYTHON_VERSIONS)
         return result_msg
 
 

@@ -6,5 +6,5 @@ class Base(BaseModel):
     ERROR_MSG: str
 
 
-class ListPython(Base):
-    PYTHONS: list
+class ListBackends(Base):
+    BACKENDS: list
