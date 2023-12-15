@@ -27,17 +27,15 @@ class BaseRouter:
     @router.post("/envpack/upload", response_model=res_vo.Base)
     def upload_envpack(self, req_body: req_vo.UploadEnv):
         result_msg = res_vo.Base(CODE=REQUEST_RESULT.SUCCESS, ERROR_MSG='')
-        if req_body.PYTHON_VER is not None:
-            code, msg, path = create_envpack(env_name=req_body.CONVERTER_ID, python_version=req_body.PYTHON_VER,
-                                             packages=req_body.PACKAGES)
-        else:
-            code, msg, path = create_envpack(env_name=req_body.CONVERTER_ID, packages=req_body.PACKAGES)
+
+        code, msg, path = create_envpack(env_name=req_body.CONVERTER_ID, packages=req_body.PACKAGES,
+                                         python=req_body.PYTHON_VER)
         if code != 0:
             result_msg.CODE = REQUEST_RESULT.FAIL
             result_msg.ERROR_MSG = "failed to make venv for python backend"
             self._logger.error(f"failed to make venv for python backend. {msg}")
         else:
-            target_path = f"converters/{req_body.CONVERTER_ID}/{path.split('/')[-1]}"
+            target_path = f"models/{req_body.CONVERTER_ID}/{path.split('/')[-1]}"
             try:
                 self._s3.upload(bucket=req_body.PRJ_ID, source_path=path, target_path=target_path)
             except Exception as e:
@@ -50,7 +48,7 @@ class BaseRouter:
 
     @router.get("/envpack/backend/pythons", response_model=res_vo.ListBackends)
     def get_pythons(self):
-        result_msg = res_vo.Base(CODE=REQUEST_RESULT.SUCCESS, ERROR_MSG='', BACKENDS=PYTHON_VERSIONS)
+        result_msg = res_vo.ListBackends(CODE=REQUEST_RESULT.SUCCESS, ERROR_MSG='', BACKENDS=PYTHON_VERSIONS)
         return result_msg
 
 

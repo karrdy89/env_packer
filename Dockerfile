@@ -17,5 +17,6 @@ RUN mkdir logs
 RUN mkdir config
 RUN mkdir tmp
 RUN pip install --upgrade pip
+RUN pip install conda-pack
 RUN pip install -r requirements.txt
 CMD ["python3", "start_server.py"]

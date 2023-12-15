@@ -7,4 +7,4 @@ class Base(BaseModel):
 
 
 class ListBackends(Base):
-    BACKENDS: list
+    BACKENDS: list[str]

@@ -1,20 +1,22 @@
 import subprocess
-from typing import Optional
 
 from _constants import TEMP_DIR
 
 
-def create_envpack(env_name: str, packages: list[str], python_version: Optional[str] = "3.11") -> tuple[int, str, str]:
-    python_base = "python" + python_version
-    packages = ' '.join(packages)
+def create_envpack(env_name: str, packages: list[str], python: str) -> tuple[int, str, str]:
+    python_base = python
     save_path = f"{TEMP_DIR}/{env_name}.tar.gz"
+    command = ". /opt/conda/etc/profile.d/conda.sh; "
+    command += f"conda create -n {env_name} --clone {python_base}; "
+    if packages:
+        packages = ' '.join(packages)
+        command += f"conda activate {env_name}; "
+        command += f"pip install {packages}; "
+        command += f"conda deactivate; "
+    command += f"conda pack -n {env_name} -o {save_path}; "
+    command += f"conda env remove -n {env_name}"
     try:
-        subprocess.run(f"conda create -n {env_name} --clone {python_base};"
-                       f"conda activate {env_name};"
-                       f"pip install {packages};"
-                       f"conda deactivate;"
-                       f"conda pack -n {env_name} -o {save_path};"
-                       f"conda env remove -n {env_name}", shell=True, check=True)
+        result = subprocess.run(command, shell=True, check=True)
     except subprocess.CalledProcessError as e:
         subprocess.run(f"conda deactivate", shell=True, check=False)
         subprocess.run(f"conda env remove -n {env_name}", shell=True, check=False)
