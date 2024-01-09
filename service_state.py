@@ -1,5 +1,6 @@
 import logging
 import uuid
+import datetime
 
 from apscheduler.schedulers.background import BackgroundScheduler
 
@@ -28,24 +29,14 @@ class ServiceState:
         self._polling_time = 10
         self._id = str(uuid.uuid4())
         self._bg_scheduler.start()
-        if SYSTEM_ENV.DISCOVER_URL is not None:
-            url = SYSTEM_ENV.API_SERVER + RequestPath.REGISTER_SERVICE
-            req_body = req_vo.RegisterService(URL=SYSTEM_ENV.DISCOVER_URL, LABEL=SYSTEM_ENV.NAME,
-                                              TAG=SYSTEM_ENV.DISCOVER_TAG, ID=self._id,
-                                              REGION=SYSTEM_ENV.DISCOVER_REGION)
-            code, msg = request_util.post(url=url, data=req_body.dict(), target_system_name="api_server")
-            if code != 0:
-                self.register_service()
-            else:
-                self._is_connected = True
-                self.connection_check()
+        self.register_service()
 
     def is_connected(self) -> bool:
         return self._is_connected
 
     def register_service(self):
         self._bg_scheduler.add_job(register_service, 'interval', seconds=self._polling_time,
-                                   id='register_service')
+                                   id='register_service', next_run_time=datetime.datetime.now())
 
     def connection_check(self):
         self._bg_scheduler.add_job(connection_check, 'interval', seconds=self._polling_time,

@@ -61,4 +61,7 @@ class RequestPath:
     CHECK_SERVICE_CONNECTION: str = "/api/v0/service"
 
 
-REQUEST_RESULT = RequestResult()
+@dataclass
+class ModelStore:
+    BASE_PATH: str = "models"
+

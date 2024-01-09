@@ -9,3 +9,5 @@ cert
 logs
 config
 tmp
+triton_test
+test.py
