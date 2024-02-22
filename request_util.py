@@ -2,11 +2,18 @@ from typing import Any
 
 import requests
 
+from _constants import SYSTEM_ENV
 
-def post(url: str, data: dict, options: dict | None = None, target_system_name: str | None = None) -> tuple[int, Any]:
-    print(f"post to: {url}")
+
+def post(url: str, data: dict, options: dict | None = None, headers: dict | None = None,
+         target_system_name: str | None = None) -> tuple[int, Any]:
+    args = {"url": url, "json": data}
+    if headers is not None:
+        args["headers"] = headers
+    if not SYSTEM_ENV.VERIFY_SSL:
+        args["verify"] = False
     try:
-        response = requests.post(url=url, json=data, verify=False)
+        response = requests.post(**args)
     except requests.exceptions.ConnectionError:
         msg = "connection error"
         if target_system_name is not None:
@@ -24,10 +31,15 @@ def post(url: str, data: dict, options: dict | None = None, target_system_name: 
     return 0, response.json()
 
 
-def get(url: str, options: dict | None = None, target_system_name: str | None = None) -> tuple[int, Any]:
-    print(f"send to: {url}")
+def get(url: str, options: dict | None = None, headers: dict | None = None,
+        target_system_name: str | None = None) -> tuple[int, Any]:
+    args = {"url": url}
+    if headers is not None:
+        args["headers"] = headers
+    if not SYSTEM_ENV.VERIFY_SSL:
+        args["verify"] = False
     try:
-        response = requests.get(url=url, verify=False)
+        response = requests.get(**args)
     except requests.exceptions.ConnectionError:
         msg = "connection error"
         if target_system_name is not None:

@@ -14,6 +14,7 @@ PYTHON_VERSIONS = ["python3.11"]
 
 class SystemEnvironments(BaseModel):
     NAME: str = "ENV_PACKER"
+    VERIFY_SSL: bool
     API_SERVER: str
     WORKERS: int
     S3_ENDPOINT: str
@@ -34,6 +35,7 @@ configs = configparser.ConfigParser(allow_no_value=True)
 configs.read(ROOT_DIR + "/config/server_config.ini")
 SYSTEM_ENV = SystemEnvironments(API_SERVER=configs["DEFAULT"]["API_SERVER"],
                                 WORKERS=configs["DEFAULT"]["WORKERS"],
+                                VERIFY_SSL=bool(int(configs["DEFAULT"]["VERIFY_SSL"])),
                                 S3_ENDPOINT=configs["S3"]["ENDPOINT"],
                                 S3_ACCESS_KEY=configs["S3"]["ACCESS_KEY"],
                                 S3_SECRET_KEY=configs["S3"]["SECRET_KEY"],
