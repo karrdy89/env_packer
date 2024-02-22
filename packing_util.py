@@ -1,6 +1,6 @@
 import subprocess
 
-from _constants import TEMP_DIR
+from _constants import TEMP_DIR, SYSTEM_ENV
 
 
 def create_envpack(env_name: str, packages: list[str], python: str) -> tuple[int, str, str]:
@@ -11,7 +11,10 @@ def create_envpack(env_name: str, packages: list[str], python: str) -> tuple[int
     if packages:
         packages = ' '.join(packages)
         command += f"conda activate {env_name}; "
-        command += f"pip install {packages}; "
+        if SYSTEM_ENV.PIP_INDEX_URL is not None and SYSTEM_ENV.PIP_TRUSTED_HOST is not None:
+            command += f"pip install {packages} -i {SYSTEM_ENV.PIP_INDEX_URL} -v --trusted-host {SYSTEM_ENV.PIP_TRUSTED_HOST}; "
+        else:
+            command += f"pip install {packages}; "
         command += f"conda deactivate; "
     command += f"conda pack -n {env_name} -o {save_path}; "
     command += f"conda env remove -n {env_name}"
