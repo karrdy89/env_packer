@@ -29,6 +29,8 @@ class SystemEnvironments(BaseModel):
     DISCOVER_URL: str
     DISCOVER_REGION: str
     DISCOVER_TAG: str
+    HC_INTERVAL: int
+    CONTAINER_NAME: str
 
 
 configs = configparser.ConfigParser(allow_no_value=True)
@@ -47,7 +49,9 @@ SYSTEM_ENV = SystemEnvironments(API_SERVER=configs["DEFAULT"]["API_SERVER"],
                                 PIP_TRUSTED_HOST=configs["PIP"]["PIP_TRUSTED_HOST"],
                                 DISCOVER_URL=configs["SERVICE_DISCOVER"]["URL"],
                                 DISCOVER_REGION=configs["SERVICE_DISCOVER"]["REGION"],
-                                DISCOVER_TAG=configs["SERVICE_DISCOVER"]["TAG"]
+                                DISCOVER_TAG=configs["SERVICE_DISCOVER"]["TAG"],
+                                HC_INTERVAL=int(configs["DEFAULT"]["HC_INTERVAL"]),
+                                CONTAINER_NAME=configs["DEFAULT"]["CONTAINER_NAME"]
                                 )
 
 
@@ -60,7 +64,7 @@ class RequestResult:
 @dataclass
 class RequestPath:
     REGISTER_SERVICE: str = "/api/v0/service/register"
-    CHECK_SERVICE_CONNECTION: str = "/api/v0/service"
+    CHECK_SERVICE_CONNECTION: str = "/api/v0/service/stats/update"
 
 
 @dataclass

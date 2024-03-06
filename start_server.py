@@ -38,6 +38,6 @@ class UvicornServer(uvicorn.Server):
 
 if __name__ == "__main__":
     s3_uploader = S3Uploader()
-    service_state = ServiceState()# dev
+    service_state = ServiceState()
     server = UvicornServer(config=config)
     server.run()
