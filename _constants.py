@@ -27,7 +27,6 @@ class SystemEnvironments(BaseModel):
     PIP_INDEX_URL: str
     PIP_TRUSTED_HOST: str
     DISCOVER_URL: str
-    DISCOVER_REGION: str
     DISCOVER_TAG: str
     HC_INTERVAL: int
     CONTAINER_NAME: str
@@ -48,7 +47,6 @@ SYSTEM_ENV = SystemEnvironments(API_SERVER=configs["DEFAULT"]["API_SERVER"],
                                 PIP_INDEX_URL=configs["PIP"]["PIP_INDEX_URL"],
                                 PIP_TRUSTED_HOST=configs["PIP"]["PIP_TRUSTED_HOST"],
                                 DISCOVER_URL=configs["SERVICE_DISCOVER"]["URL"],
-                                DISCOVER_REGION=configs["SERVICE_DISCOVER"]["REGION"],
                                 DISCOVER_TAG=configs["SERVICE_DISCOVER"]["TAG"],
                                 HC_INTERVAL=int(configs["DEFAULT"]["HC_INTERVAL"]),
                                 CONTAINER_NAME=configs["DEFAULT"]["CONTAINER_NAME"]
